@@ -25,6 +25,24 @@ P     I    N
 A   L S  I G
 Y A   H R
 P     I
+
+very clever algorithm
+['1', '', '', '', '', '']
+['1', '2', '', '', '', '']
+['1', '2', '3', '', '', '']
+['1', '2', '3', '4', '', '']
+['1', '2', '3', '4', '5', '']
+['1', '2', '3', '4', '5', '6']
+['1', '2', '3', '4', '57', '6']
+['1', '2', '3', '48', '57', '6']
+['1', '2', '39', '48', '57', '6']
+['1', '2a', '39', '48', '57', '6']
+['1b', '2a', '39', '48', '57', '6']
+['1b', '2ac', '39', '48', '57', '6']
+['1b', '2ac', '39d', '48', '57', '6']
+['1b', '2ac', '39d', '48e', '57', '6']
+['1b', '2ac', '39d', '48e', '57f', '6']
+1b2ac39d48e57f6
 @author: Abigail
 """
 
@@ -34,18 +52,16 @@ def convert( s, numRows):
         :type numRows: int
         :rtype: str
         """
-        ns=''
-        if numRows == 1:return s
-        stride = 2*(numRows - 1)
+        if len(s) <= numRows or numRows == 1:return s
         
-        for i in range((numRows)):
-            k=0
-            while k*stride + i < len(s):
-                ns+=s[k*stride+i]
-                if i !=0 and i != numRows -1 and (k+1)*stride -i <  len(s):
-                    ns+=s[(k+1)*stride -i]
-                k+=1
-        return ns
+        L = [''] * numRows
+        index, step = 0, 1
+        for x in s:
+            if index == 0:step = 1
+            elif index == numRows-1:step = -1
+            L[index] += x
+            index += step
+        return ''.join(L)
 s="123456789abcdef"         
 print(convert(s,6))
                 
