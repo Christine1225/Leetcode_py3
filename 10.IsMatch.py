@@ -45,57 +45,87 @@ p = "mis*is*p*."
 输出: false i p
 @author: Abigail
 """
-def isMatch( s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: bool
-        """
-        lp,ls = len(p), len(s)
-        if lp < 2  and p!="." and p!= "*":
-            if p == s:
-                return True
-            else: return False
-        if (ls ==0 and p != "" ) or (lp ==0 and s !=''):return    False 
-        i,j=0,0
-        while i + 1 < lp and j < ls:
-            if p[i:i+2] == ".*":
-                return True
-            elif p[i] == ".":i,j=i+1,j+1
-            elif p[i+1] == "*":
-                while s[j] == p[i] :
-                    j+=1
-#                    print(i,j)
-                    if j == ls: 
-                       if i+ 2 >= lp: return True
-                       else:return False
-                           
-                i+=2
-                if i >= lp : return False
-                if p[i] == "." and i+1 == lp and j+1 == ls:return True
-                elif p[i] == "." and i+1 == lp: return False
-#                if p[i] == "*" and i+1 = lp :return True 
-            elif p[i] == s[j]:
-                i,j=i+1,j+1 
-#                print("i,j",i,j)
-            else: return False
-        if p[-1] == "*" and( s[-1] == p[-2] or s[-1] == p[-1]  ):return True  
-        else: return p[-1] == s[-1]
-s,p="aaa","aa"                
-print(isMatch( s, p))        
-#s,p="mississippi","mis*is*ip*."                
-#print(isMatch( s, p))        
+def isMatch( text, pattern):
+    memo = {}
+    def dp(i, j):
+        if (i, j) not in memo:
+            if j == len(pattern):
+                ans = i == len(text)
+            else:
+                first_match = i < len(text) and pattern[j] in {text[i], '.'}
+                if j+1 < len(pattern) and pattern[j+1] == '*':
+                    ans = dp(i, j+2) or first_match and dp(i+1, j)
+                else:
+                    ans = first_match and dp(i+1, j+1)
+
+            memo[i, j] = ans
+        return memo[i, j]
+
+    return dp(0, 0)
+        
+#        lp,ls = len(p), len(s)
+#        if lp < 2  and p!="." and p!= "*":
+#            if p == s:
+#                return True
+#            else: return False
+#        if (ls ==0 and p != "" ) or (lp ==0 and s !=''):return    False 
+#        i,j=0,0
+#        while i + 1 < lp and j < ls:
+#            if p[i:i+2] == ".*":
+#                i+=2
+#                if i == lp:
+#                    return True
+#                else:
+#                    for jj,c in enumerate(s[j:]):
+#                        if c == p[i]:
+#                            j=jj
+#                           
+#            elif p[i] == ".":i,j=i+1,j+1
+#            elif p[i+1] == "*":
+#                while s[j] == p[i] :
+#                    j+=1
+##                    print(i,j)
+#                    if j == ls: #s is end
+#                       if i+ 2 >= lp: return True
+#                       elif (p[i+2] == "." or p[i+2] == s[-1]) and i+3 == lp : return True 
+#                           
+#                       else:            return False                  
+#                i+=2
+#                if i >= lp : return False
+#                if p[i] == "." and i+1 == lp and j+1 == ls:return True
+#                elif p[i] == "." and i+1 == lp: return False
+##                if p[i] == "*" and i+1 = lp :return True 
+#            elif p[i] == s[j]:
+#                i,j=i+1,j+1 
+##                print("i,j",i,j)
+#            else: return False
+#        if p[-1] == "*" :
+#            for c in s[j:]:
+#                if c != p[-2]:
+#                    return False
+#            return True  
+#        elif p[-1] != "*" and s[-1] == p[-1] and j + 1 ==ls   : return True
+#        else:return False
+#s1,s2,p="aabcb","cb",".*cb"                
+#print(isMatch( s1, p),isMatch( s2, p))                  
+#s,p="aab","c*a*b"                
+#print(isMatch( s, p))
+s,p="aaa","ab*a*c*a"                
+print(isMatch( s, p))  
+#s,p="mississippi","mis*is*ip*"                
+#print(isMatch( s, p))                   
 #s,p="","abc"                
 #print(isMatch( s, p))
 #s,p="a",""                
 #print(isMatch( s, p))
+#s,p="aaa","aa"                
+#print(isMatch( s, p))        
+#s,p="mississippi","mis*is*ip*."                
+#print(isMatch( s, p))        
 #s,p="aa","a"                
 #print(isMatch( s, p))                
 #s,p="aa","a*"                
-#print(isMatch( s, p))                   
+#print(isMatch( s, p)) 
+                  
 #s,p="ab",".*"                
-#print(isMatch( s, p))                   
-#s,p="aab","c*a*b"                
-#print(isMatch( s, p))  
-#s,p="mississippi","mis*is*ip*"                
-#print(isMatch( s, p))                   
+#print(isMatch( s, p)) 
