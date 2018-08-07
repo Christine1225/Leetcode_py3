@@ -12,35 +12,17 @@ class Solution:
         :rtype: int
         """
         dic = {"M":1000,"CM":900,"D":500,"CD":400,"C":100,"XC":90,"L":50,"XL":40,"X":10,"IX":9,"V":5,"IV":4,"I":1}
+        spec = {"C","X","I"}
         lens = len( s )
         i  ,ans = 0, 0
         while i < lens:
-            if s[i] == "C":
-                if i + 1 < lens and (s[i+1] == "M" or s[i+1] == "D"):
-                    ans+= dic[s[i:i+2]]
-                    i+=2
-                else:
-                    ans+=100
-                    i+=1
-            elif s[i] == "X":
-                 if i + 1 < lens and (s[i+1] == "C" or s[i+1] == "L"):
-                     ans+= dic[s[i:i+2]]
-                     i+=2
-                 else:
-                     ans+=10
-                     i+=1
-#                     print(ans,i)
-            elif s[i] == "I":
-                 if i + 1 < lens and (s[i+1] == "X" or s[i+1] == "V"):
-                     ans+= dic[s[i:i+2]]
-                     i+=2
-#                     print(ans,i)
-                 else:
-                     ans+=1
-                     i+=1  
-            elif i < lens:         
+            if s[i] in spec  and i+ 1 < lens and s[i:i+2] in dic:
+                ans += dic[s[i:i+2]]
+                i+=2
+            else:
                 ans += dic[s[i]]
                 i+=1
+
                 
         return ans
 ss = Solution()        
