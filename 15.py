@@ -18,67 +18,35 @@ class Solution:
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        lens = len(nums)
-        if lens < 3:
-            return []
-        nums = self.quicksort(nums) 
-        print(nums)
-        i,j = 1,lens-1
-        ans = []
-        lastTarget = nums[0] + 1
-        for start,target in enumerate ( nums[0:lens-2]):
-#            if target + nums[j] + nums[j-1] < 0 :
-##                print(target,nums[i],i)
-#                target = nums[i]
-#                
-#                i+=1
-#                continue
-#            elif target + nums[i] + nums[i+1] > 0:
-#                target = nums[i]
-#                i+= 1
-#                continue
-            
-            if target == lastTarget:
-                continue
-            i= start +1
-            j = lens-1
-#            print(target,i,j)
-            while i < j:
-                if target + nums[i] + nums[j] == 0 :
-                    ans.append([target,nums[i],nums[j]])
-                    while nums[i] == nums[i+1] :
-                        i = i+1
-                        if target == -1: print (target,i,j)
-                        if i<= j:break
-                    i+=1
-#                    print("i",i,nums[i])
-                    while nums[j] == nums[j-1] and i < j:    
-                        j-=1
-                        if i<= j:break
-                    j-=1
-                    print("j",j)
-                elif target + nums[i] + nums[j] > 0:    
-                    j-=1
-                elif target + nums[i] + nums[j] < 0:
-                    i+=1
-#                print (i,j)
-            lastTarget  = target    
-        return ans
-    def quicksort(self,data) :
-        if len(data) < 1:
-            return data
-        pivot = data[0]
-        left = []
-        right = []
-        for x in range(1, len(data)):
-            if data[x] <= pivot:
-                left.append(data[x])
+        import collections
+        
+        d = collections.Counter(nums)
+        nums_keys = d.keys()
+        
+        # return list(nums_keys)
+        
+        pos, neg = [],[]
+        
+        for p in nums_keys:
+            if p >= 0:
+                pos.append(p)
             else:
-                right.append(data[x])
-        left = self.quicksort(left)
-        right = self.quicksort(right)
-        foo = [pivot]
-        return left + foo + right
+                neg.append(p)
+                
+        r = []
+        
+        if d.get(0,0) > 2:
+            r.append([0,0,0])
+        
+        for i in neg:
+            for j in pos:
+                tar = - i - j
+                if tar in nums_keys:
+                    if i< tar < j:
+                        r.append([i,tar,j])
+                    elif (j==tar or i == tar) and d[tar]>1:
+                        r.append([i,tar,j])
+        return r
 ss = Solution()
 #L = [-2,0,1,1,2]
 #L= [-2,0,0,2,2]
