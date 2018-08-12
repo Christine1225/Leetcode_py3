@@ -37,8 +37,7 @@ class Solution:
         :type s: str
         :rtype: bool
         """
-        if s == '':
-            return True
+      
         lens = len(s)
         if lens == 1:
             return False
@@ -47,9 +46,7 @@ class Solution:
 #            print(r)
             if ch in {"(":")","{":"}","[":"]"}:
                 r.append(ch)
-            elif r== [] :
-                return False
-            elif ch != d[r[-1]]:
+            elif r== [] or ch != d[r[-1]]:
                 return False
             else:
                 r.pop()#default -1 position
